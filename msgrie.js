@@ -16,6 +16,14 @@ socket.on('data', data => {
     if (!sockets[socket.id]){
         socket.name = data.toString().trim();
         socket.write('Welcome '+ socket.name +'!\n');
+        Object.entries(sockets).forEach(([key, cs]) => {
+
+            if (socket.id == key) return;
+            cs.write( socket.name + ' <---vient de se connecter à --->'+timestamp()+'\n');
+        
+
+
+        });
         console.log(socket.name+' s est connecté');
         sockets[socket.id] = socket;
         return;
@@ -35,6 +43,14 @@ socket.on('data', data => {
 
 socket.on('end', () =>{
 
+    Object.entries(sockets).forEach(([key, cs]) => {
+
+        if (socket.id == key) return;
+        cs.write(timestamp() + '_' + socket.name + ' : S_EST_DECONNECTE_DE_L_APPLI\n');
+        
+
+
+    });
     delete sockets[socket.id];
     console.log(socket.name+' s est déconnecté :( ');
     
